@@ -115,11 +115,10 @@ export async function inviteMember(formData: FormData) {
     return { success: true, directAdd: true }
   }
 
-  // Check for existing pending invite
-  const existingInvite = await prisma.invitation.findFirst({
-    where: { email, teamId, accepted: false, expiresAt: { gt: new Date() } },
+  // Delete any existing pending invite so we can resend a fresh one
+  await prisma.invitation.deleteMany({
+    where: { email, teamId, accepted: false },
   })
-  if (existingInvite) return { error: "An invitation has already been sent to this email" }
 
   // Get inviter name and team name for email
   const [inviter, team] = await Promise.all([
