@@ -1,10 +1,10 @@
 const { PrismaClient } = require("@prisma/client")
-const { PrismaPg } = require("@prisma/adapter-pg")
-const { Pool } = require("pg")
+const { PrismaNeon } = require("@prisma/adapter-neon")
+const { Pool } = require("@neondatabase/serverless")
 const bcrypt = require("bcryptjs")
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-const adapter = new PrismaPg(pool)
+const adapter = new PrismaNeon(pool)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
